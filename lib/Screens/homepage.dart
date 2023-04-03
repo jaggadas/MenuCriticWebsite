@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:menucritic/Screens/dashboard.dart';
 import 'package:menucritic/utils/constants.dart';
+import 'package:menucritic/utils/googleapi.dart';
 import 'package:sizer/sizer.dart';
 
 class MyHomepage extends StatefulWidget {
@@ -108,7 +109,9 @@ class _MyHomepageState extends State<MyHomepage> {
                                 .of(context)
                                 .size
                                 .width / 3, child: GestureDetector(
-                              onTap: () async {},
+                              onTap: () async {
+                                await GoogleApiResponse().getData();
+                              },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
@@ -118,7 +121,7 @@ class _MyHomepageState extends State<MyHomepage> {
                                   child: Text(
                                     "Search",
                                     style: TextStyle(
-                                        color: bgcolor,
+                                        color: Colors.black ,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),

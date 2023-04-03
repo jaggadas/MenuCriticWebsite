@@ -21,6 +21,13 @@ class _DashboardState extends State<Dashboard> {
     // TODO: implement initState
     //_del();
     super.initState();
+    apiResponse();
+  }
+  String responseBody='';
+  apiResponse() async{
+    GoogleApiResponse googleApiResponse=GoogleApiResponse(googleID: 'ChIJ-1IVSQP7DDkRPG7cC-zF5p4');
+    responseBody= await googleApiResponse.getData()!= null? googleApiResponse.getData().toString():'';
+    print(responseBody);
   }
 
   @override

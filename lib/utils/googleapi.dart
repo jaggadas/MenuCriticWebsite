@@ -16,8 +16,10 @@ class GoogleApiResponse{
         'X-API-KEY': _key,
       };
       final http.Response response;
+      final http.Response response2;
       time = DateTime.now();
-      response = await http.get(Uri.https('api.app.outscraper.com', 'maps/reviews-v3', {'query' : googleID, 'reviewsLimit' : '10'},), headers: headers);
+      response = await http.get(Uri.https('api.app.outscraper.com', 'maps/reviews-v3', {'query' : googleID, 'reviewsLimit' : '3', 'async': 'false'},), headers: headers);
+      //response2= await http.get(Uri.https('api.app.outscraper.com', ''))
       debugPrint('historical');
       data = jsonDecode(response.body);
       print(response.statusCode);
