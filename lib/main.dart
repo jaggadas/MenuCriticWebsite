@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:menucritic/Screens/dashboard.dart';
 import 'package:menucritic/Screens/homepage.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
@@ -15,10 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AnimatedSplashScreen(splash: SvgPicture.asset('assets/images/MenuCriticSplashLogo.svg',),duration: 500,
-          splashTransition: SplashTransition.fadeTransition,
-          backgroundColor: Color(0xFF1C4E80),
-          nextScreen: MyHomepage()),
+      home: Dashboard(PlaceId: '121234')
+      // AnimatedSplashScreen(splash: SvgPicture.asset('assets/images/MenuCriticSplashLogo.svg',),duration: 500,
+      //     splashTransition: SplashTransition.fadeTransition,
+      //     backgroundColor: Color(0xFF1C4E80),
+      //     nextScreen: MyHomepage()),
     );
   }
 }
