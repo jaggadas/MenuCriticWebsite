@@ -17,3 +17,5 @@ LinearGradient frontgradient= LinearGradient(
       Color(0xE3000000),
       Color(0x8506087A),
     ]);
+
+Color bgcolor=Color(0xFF1C4E80);

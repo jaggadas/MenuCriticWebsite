@@ -12,21 +12,31 @@ class MyHomepage extends StatefulWidget {
 }
 
 class _MyHomepageState extends State<MyHomepage> {
-  String PlaceId='';
+  String PlaceId = '';
+
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return Scaffold(
         body: Stack(children: [
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             decoration: BoxDecoration(
                 gradient: bggradient),
           ),
           Center(
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.8,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.8,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.9,
               decoration: BoxDecoration(
                   gradient: frontgradient,
                   borderRadius: BorderRadius.circular(20.0)),
@@ -35,7 +45,7 @@ class _MyHomepageState extends State<MyHomepage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                             height: 80.sp,
@@ -43,10 +53,13 @@ class _MyHomepageState extends State<MyHomepage> {
                             child: SvgPicture.asset(
                                 'assets/images/MenuCriticSplashLogo.svg')),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 3,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width / 2.5,
                           child: Text(
                             'Nibh quisque suscipit fermentum netus nulla cras porttitor euismod nulla. Orci dictumst nec aliquet id ullamcorper venenatis. ',
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -54,15 +67,19 @@ class _MyHomepageState extends State<MyHomepage> {
                           height: 30,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.5,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width / 2.5,
                           child: TextField(
-                            onChanged: (value){
-                              PlaceId=value;
+                            onChanged: (value) {
+                              PlaceId = value;
                             },
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               hintText: 'Enter Google/Yelp place ID',
-                              hintStyle: TextStyle(color: Colors.white),
+                              hintStyle: TextStyle(
+                                  color: Colors.white.withOpacity(0.5)),
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 15),
                               border: OutlineInputBorder(
@@ -72,15 +89,43 @@ class _MyHomepageState extends State<MyHomepage> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(width: 1, color: Colors.white),
+                                BorderSide(width: 1, color: Colors.white),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               fillColor:
-                                  Theme.of(context).colorScheme.secondary,
+                              Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .secondary,
                             ),
                           ),
                         ),
-                        TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context){return Dashboard(PlaceId: PlaceId,);}));}, child: Text('Search')),
+                        SizedBox(height: 30,),
+                        Container(
+                          width: MediaQuery.of(context).size.width/2.5,
+                          child: Center(
+                            child: Container(width: MediaQuery
+                                .of(context)
+                                .size
+                                .width / 3, child: GestureDetector(
+                              onTap: () async {},
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
+                                child: Center(
+                                  child: Text(
+                                    "Search",
+                                    style: TextStyle(
+                                        color: bgcolor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ), ),
+                          ),
+                        ),
                         Spacer(),
                       ],
                     ),
