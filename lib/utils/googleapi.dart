@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:menucritic/utils/testreview.dart';
 
 class GoogleApiResponse{
   late String? googleID;
-  final String _key = 'Z29vZ2xlLW9hdXRoMnwxMDg2MzQ3MjA2Njc2MDc3ODk4MjR8NmQzMTBjOTg1Mg';
+ // final String _key = 'YXV0aDB8NjM5YjRjNTU1MDBiZTZlMGViNTgyNDc0fGJhZTIyZTFjZjU';
+  final String _key= 'Z29vZ2xlLW9hdXRoMnwxMDg2MzQ3MjA2Njc2MDc3ODk4MjR8NmQzMTBjOTg1Mg';
   Map ?data;
   late String resLoc;
   DateTime? time;
@@ -23,8 +25,10 @@ class GoogleApiResponse{
       debugPrint('historical');
       data = jsonDecode(response.body);
       print(response.statusCode);
-      print(data);
+      //print(response.body);
       print('success $success');
+      reviewData data2= reviewData();
+      data2.getReviewData();
     }
     catch (e, s) {
       debugPrint('$e \n $s');
