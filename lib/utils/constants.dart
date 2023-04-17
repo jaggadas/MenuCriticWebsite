@@ -10,6 +10,13 @@ LinearGradient bggradient=LinearGradient(
       Colors.blue.shade900
     ]);
 
+LinearGradient myGradient=LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerLeft,
+    colors: [
+      Colors.transparent, Colors.white
+    ]);
+
 LinearGradient frontgradient= LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

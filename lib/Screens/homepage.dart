@@ -77,6 +77,7 @@ class _MyHomepageState extends State<MyHomepage> {
                               PlaceId = value;
                             },
                             textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               hintText: 'Enter Google/Yelp place ID',
                               hintStyle: TextStyle(
@@ -108,15 +109,16 @@ class _MyHomepageState extends State<MyHomepage> {
                             child: Container(width: MediaQuery
                                 .of(context)
                                 .size
-                                .width / 3, child: GestureDetector(
+                                .width / 5, child: GestureDetector(
                               onTap: () async {
-                                await GoogleApiResponse().getData();
+                                //await GoogleApiResponse().getData();
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(PlaceId: '12345')),);
                               },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
+                                    borderRadius: BorderRadius.circular(80),
+                                    gradient: myGradient),
                                 child: Center(
                                   child: Text(
                                     "Search",
@@ -129,6 +131,28 @@ class _MyHomepageState extends State<MyHomepage> {
                             ), ),
                           ),
                         ),
+                        // Container(
+                        //   width: MediaQuery.of(context).size.width/2.5,
+                        //   child: ElevatedButton(
+                        //     onPressed: () { },
+                        //     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                        //     //padding: const EdgeInsets.all(0.0),
+                        //     child: Ink(
+                        //       decoration: BoxDecoration(
+                        //         gradient: myGradient,
+                        //         borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        //       ),
+                        //       child: Container(
+                        //        // constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
+                        //         alignment: Alignment.center,
+                        //         child: const Text(
+                        //           'OK',
+                        //           textAlign: TextAlign.center,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Spacer(),
                       ],
                     ),
