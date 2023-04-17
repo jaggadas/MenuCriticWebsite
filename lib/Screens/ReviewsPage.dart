@@ -1,12 +1,15 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:menucritic/utils/ABSAApi.dart';
 import 'package:pie_chart/pie_chart.dart' as pi;
 
 import '../models/Review.dart';
 import '../utils/constants.dart';
 
 class ReviewsPage extends StatefulWidget {
-  ReviewsPage({required this.reviews});
+  ReviewsPage({required this.reviews}){
+    debugPrint("number of reviews :${reviews.length}");
+  }
   List<Review> reviews;
   @override
   State<ReviewsPage> createState() => _ReviewsPageState();
@@ -55,8 +58,17 @@ class _ReviewsPageState extends State<ReviewsPage> {
   final int threeStarReviews=34;
   final int twoStarReviews=5;
   final int oneStarReviews=2;
-
-
+  sendReviewsToModel() async {
+    for(Review review in widget.reviews){
+      await AbsaAPIResponse().getReviewAnalysis(review.reviewText);
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sendReviewsToModel();
+  }
   @override
   Widget build(BuildContext context) {
     int totalReviews = fiveStarReviews +

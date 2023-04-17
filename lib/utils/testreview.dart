@@ -21,8 +21,7 @@ class TestAPIResponse{
           Review reviewObject = Review(reviewText: review["review_text"] ?? "", rating: review["review_rating"] ?? 1, date: review["review_datetime_utc"]??"", id: 1);
           reviewObjects.add(reviewObject);
         }
-        debugPrint("length :${reviewObjects.length}");
-        debugPrint(reviewObjects.toString());
+
 
         return reviewObjects;
         
