@@ -5,6 +5,8 @@ import 'package:menucritic/utils/constants.dart';
 import 'package:menucritic/utils/googleapi.dart';
 import 'package:sizer/sizer.dart';
 
+import '../utils/testreview.dart';
+
 class MyHomepage extends StatefulWidget {
   const MyHomepage({Key? key}) : super(key: key);
 
@@ -14,7 +16,16 @@ class MyHomepage extends StatefulWidget {
 
 class _MyHomepageState extends State<MyHomepage> {
   String PlaceId = '';
-
+    apiResponse() async{
+      if(testmode){
+        TestAPIResponse testAPIResponse = TestAPIResponse();
+        responseBody= testAPIResponse.getReviewData();
+      }else{
+        GoogleApiResponse googleApiResponse=GoogleApiResponse(googleID: 'ChIJ-1IVSQP7DDkRPG7cC-zF5p4');
+        responseBody= await googleApiResponse.getReviewData()!= null? googleApiResponse.getReviewData().toString():'';
+        print(responseBody);
+      }
+    }
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
@@ -131,28 +142,7 @@ class _MyHomepageState extends State<MyHomepage> {
                             ), ),
                           ),
                         ),
-                        // Container(
-                        //   width: MediaQuery.of(context).size.width/2.5,
-                        //   child: ElevatedButton(
-                        //     onPressed: () { },
-                        //     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-                        //     //padding: const EdgeInsets.all(0.0),
-                        //     child: Ink(
-                        //       decoration: BoxDecoration(
-                        //         gradient: myGradient,
-                        //         borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        //       ),
-                        //       child: Container(
-                        //        // constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
-                        //         alignment: Alignment.center,
-                        //         child: const Text(
-                        //           'OK',
-                        //           textAlign: TextAlign.center,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+
                         Spacer(),
                       ],
                     ),

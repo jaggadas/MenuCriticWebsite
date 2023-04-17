@@ -3,6 +3,9 @@ import 'package:easy_sidemenu/easy_sidemenu.dart' as sd;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:menucritic/Screens/ReviewsPage.dart';
 import 'package:menucritic/utils/googleapi.dart';
+import 'package:menucritic/utils/testreview.dart';
+
+import '../utils/constants.dart';
 class Dashboard extends StatefulWidget {
   Dashboard({required this.PlaceId});
   String PlaceId;
@@ -16,19 +19,9 @@ class _DashboardState extends State<Dashboard> {
   bool isOpen = true;
   sd.SideMenuDisplayMode mode = sd.SideMenuDisplayMode.open;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    //_del();
-    super.initState();
-    apiResponse();
-  }
-  String responseBody='';
-  apiResponse() async{
-    GoogleApiResponse googleApiResponse=GoogleApiResponse(googleID: 'ChIJ-1IVSQP7DDkRPG7cC-zF5p4');
-    responseBody= await googleApiResponse.getData()!= null? googleApiResponse.getData().toString():'';
-    print(responseBody);
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {

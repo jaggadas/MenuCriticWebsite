@@ -7,11 +7,11 @@ class GoogleApiResponse{
   late String? googleID;
  // final String _key = 'YXV0aDB8NjM5YjRjNTU1MDBiZTZlMGViNTgyNDc0fGJhZTIyZTFjZjU';
   final String _key= 'Z29vZ2xlLW9hdXRoMnwxMDg2MzQ3MjA2Njc2MDc3ODk4MjR8NmQzMTBjOTg1Mg';
-  Map ?data;
+  Map data={};
   late String resLoc;
   DateTime? time;
   GoogleApiResponse({ this.googleID,});
-  Future<Map?> getData( ) async {
+  Future<Map> getReviewData( ) async {
     int success = 0;
     try {
       Map<String, String> headers = {
@@ -21,14 +21,10 @@ class GoogleApiResponse{
       final http.Response response2;
       time = DateTime.now();
       response = await http.get(Uri.https('api.app.outscraper.com', 'maps/reviews-v3', {'query' : googleID, 'reviewsLimit' : '3', 'async': 'false'},), headers: headers);
-      //response2= await http.get(Uri.https('api.app.outscraper.com', ''))
       debugPrint('historical');
       data = jsonDecode(response.body);
       print(response.statusCode);
-      //print(response.body);
       print('success $success');
-      reviewData data2= reviewData();
-      data2.getReviewData();
     }
     catch (e, s) {
       debugPrint('$e \n $s');

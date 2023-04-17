@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+bool testmode=true;
 LinearGradient bggradient=LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
