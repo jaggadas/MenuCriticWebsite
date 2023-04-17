@@ -5,10 +5,11 @@ import 'package:menucritic/Screens/ReviewsPage.dart';
 import 'package:menucritic/utils/googleapi.dart';
 import 'package:menucritic/utils/testreview.dart';
 
+import '../models/Review.dart';
 import '../utils/constants.dart';
 class Dashboard extends StatefulWidget {
-  Dashboard({required this.PlaceId});
-  String PlaceId;
+  Dashboard({required this.reviews});
+  List<Review> reviews;
   @override
   State<Dashboard> createState() => _DashboardState();
 }
