@@ -104,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                 controller: _controller,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                ReviewsPage(),
+                ReviewsPage(reviews: widget.reviews,),
                   Container(),
 
                 ],

@@ -2,11 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pi;
 
+import '../models/Review.dart';
 import '../utils/constants.dart';
 
 class ReviewsPage extends StatefulWidget {
-  const ReviewsPage({Key? key}) : super(key: key);
-
+  ReviewsPage({required this.reviews});
+  List<Review> reviews;
   @override
   State<ReviewsPage> createState() => _ReviewsPageState();
 }
