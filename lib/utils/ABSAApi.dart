@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 class AbsaAPIResponse{
+
   String apiUrl = 'https://ecstatic-shadow-75024.pktriot.net';
+
   getReviewAnalysis(String reviewText) async {
     try{
-      final url = Uri.parse('$apiUrl/predict?text=food%20is%20good%20but%20service%20is%20bad');
+
+      final url = Uri.parse('https://ecstatic-shadow-75024.pktriot.net/predict?text=$reviewText');
 
       final response = await http.post(
         url,
@@ -18,8 +21,10 @@ class AbsaAPIResponse{
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }
+
     }catch(e){
       print(e);
     }
   }
+
 }
