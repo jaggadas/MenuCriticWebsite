@@ -164,7 +164,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
     return Scaffold(backgroundColor: Color(0xffdbdbdb),appBar: AppBar(backgroundColor: Color(0xffF1FAFE),leading: IconButton(onPressed: (){Navigator.pop(context);},
         icon:Icon(Icons.arrow_back_ios_rounded),color: Color(0xff1E1E2C),)),body:
       ModalProgressHUD(inAsyncCall: showSpinner,
-        child: Padding(
+        child: showSpinner?Container():Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(children: [
