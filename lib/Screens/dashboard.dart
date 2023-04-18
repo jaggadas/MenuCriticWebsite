@@ -7,9 +7,12 @@ import 'package:menucritic/utils/testreview.dart';
 
 import '../models/Review.dart';
 import '../utils/constants.dart';
+
 class Dashboard extends StatefulWidget {
   Dashboard({required this.reviews});
+
   List<Review> reviews;
+
   @override
   State<Dashboard> createState() => _DashboardState();
 }
@@ -20,17 +23,12 @@ class _DashboardState extends State<Dashboard> {
   bool isOpen = true;
   sd.SideMenuDisplayMode mode = sd.SideMenuDisplayMode.open;
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
           sd.SideMenu(
-
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               physics: const NeverScrollableScrollPhysics(),
@@ -51,9 +49,10 @@ class _DashboardState extends State<Dashboard> {
                               });
                             },
                             child: Image.asset(
-                              'assets/Images/MenuCriticLogoTrans.png',height: 100,width: 200,
+                              'assets/Images/MenuCriticLogoTrans.png',
+                              height: 100,
+                              width: 200,
                             ))),
-
                   ],
                 ),
               ),
@@ -71,9 +70,9 @@ class _DashboardState extends State<Dashboard> {
               selectedIconColor: Colors.white,
               unselectedIconColor: Colors.white,
               selectedTitleTextStyle:
-              GoogleFonts.poppins(color: Colors.white, fontSize: 15),
+                  GoogleFonts.poppins(color: Colors.white, fontSize: 15),
               unselectedTitleTextStyle:
-              GoogleFonts.poppins(color: Colors.white, fontSize: 15),
+                  GoogleFonts.poppins(color: Colors.white, fontSize: 15),
               iconSize: 20,
               itemOuterPadding: const EdgeInsets.all(8),
               itemInnerSpacing: 10,
@@ -83,32 +82,32 @@ class _DashboardState extends State<Dashboard> {
                   priority: 0,
                   title: 'REVIEWS',
                   icon: const Icon(Icons.reviews),
-                  onTap: (val,controller) {
-                    controller.changePage(0) ;
+                  onTap: (val, controller) {
+                    controller.changePage(0);
                     _controller.jumpToPage(0);
                   }),
               sd.SideMenuItem(
                   priority: 1,
                   title: 'ABOUT US',
                   icon: const Icon(Icons.people),
-                  onTap: (val,controller) {
-                    controller.changePage(1) ;
+                  onTap: (val, controller) {
+                    controller.changePage(1);
                     _controller.jumpToPage(1);
                   }),
-
             ],
             controller: _controllerSideMenu,
           ),
           Expanded(
               child: PageView(
-                controller: _controller,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                ReviewsPage(reviews: widget.reviews,),
-                  Container(),
-
-                ],
-              ))
+            controller: _controller,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              ReviewsPage(
+                reviews: widget.reviews,
+              ),
+              Container(),
+            ],
+          ))
         ],
       ),
     );

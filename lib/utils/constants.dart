@@ -1,29 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-bool testmode=true;
-LinearGradient bggradient=LinearGradient(
+
+bool testmode = true;
+LinearGradient bggradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [
-      Colors.black,
-      Colors.deepPurple.shade900,
-      Colors.blue.shade900
-    ]);
+    colors: [Colors.black, Colors.deepPurple.shade900, Colors.blue.shade900]);
 
-LinearGradient myGradient=LinearGradient(
+LinearGradient myGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerLeft,
-    colors: [
-      Colors.transparent, Colors.white
-    ]);
+    colors: [Colors.transparent, Colors.white]);
 
-LinearGradient frontgradient= LinearGradient(
+LinearGradient frontgradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xE3000000),
-      Color(0x8506087A),
+      Color.fromRGBO(49, 50, 78, 1),
+      Color.fromRGBO(95, 96, 237, 1),
     ]);
+
 class AppColors {
   static const Color primary = contentColorCyan;
   static const Color menuBackground = Color(0xFF090912);
