@@ -30,7 +30,6 @@ class _ReviewsPageState extends State<ReviewsPage> {
     "Ambience":9,
     "Service":5
   };// to be generated in code
-  List<Color> colorsCategory=[Color(0xff79e06c),Color(0xffeb5146),Colors.blue,Colors.deepOrangeAccent];// to be generated in code
   List<String> positiveCategories=["Ambience","Food"];
   List<String> negativeCategories=["Time","Service","Pricing"];
   int fiveStarReviews=0;
@@ -422,36 +421,45 @@ class BoxWithShadow extends StatelessWidget {
 }
 
 class BoxWithShadowHeightless extends StatelessWidget {
-
   Widget child;
   String title;
-
 
   BoxWithShadowHeightless({required this.child,required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(color: Colors.white,elevation: 20,borderRadius: BorderRadius.circular(10),child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-
-                  ],
-                ),
-                SizedBox(height: 40,),
-                child,
-                SizedBox(height: 20,)
-              ],
+    return Flexible(
+      child: Material(
+        color: Colors.white,
+        elevation: 20,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  child,
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }
