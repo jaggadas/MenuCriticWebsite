@@ -22,10 +22,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
 
   List<Color> colorsPositiveNegative=[Color(0xff1E1E2C),Color(0xff455880)];
   Map<String, double> Categories = {
-    "Food":8,
-    "Pricing":3,
-    "Ambience":9,
-    "Service":5
+   //idhar add karna hai
   };// to be generated in code
   List<Color> colorsCategory=[Color(0xff79e06c),Color(0xffeb5146),Colors.blue,Colors.deepOrangeAccent];// to be generated in code
   List<String> positiveCategories=["Ambience","Food"];
@@ -125,6 +122,21 @@ class _ReviewsPageState extends State<ReviewsPage> {
 
    });
   }
+  generateCategories()
+  {
+    for(ReviewAnalysis reviewAnal in reviewAnalysis){
+      
+      for(Analysis analysis in reviewAnal.analysis){
+        if(Categories.containsKey('${analysis.term}')) {
+          Categories.update(analysis.term, (value) => value + 1);
+        }
+        else{
+
+        }
+      }
+      
+    }
+  }
   generateStarRating(){
     for(Review review in widget.reviews){
       if(review.rating==5){
@@ -147,6 +159,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
     await sendReviewsToModel();
     generatePositiveNegative();
     generateStarRating();
+    //idhar hi aayega function graph ka
   }
   @override
   void initState() {

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart' as sd;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:menucritic/Screens/ReviewsPage.dart';
+import 'package:menucritic/utils/ABSAApi.dart';
 import 'package:menucritic/utils/googleapi.dart';
 import 'package:menucritic/utils/testreview.dart';
 
 import '../models/Review.dart';
+import '../models/ReviewAnalysis.dart';
 import '../utils/constants.dart';
 class Dashboard extends StatefulWidget {
   Dashboard({required this.reviews});
@@ -19,7 +21,7 @@ class _DashboardState extends State<Dashboard> {
   final PageController _controller = PageController();
   bool isOpen = true;
   sd.SideMenuDisplayMode mode = sd.SideMenuDisplayMode.open;
-
+  List<ReviewAnalysis>? reviewAnalysis;
 
 
 
@@ -121,5 +123,9 @@ class _DashboardState extends State<Dashboard> {
     } else {
       return 70;
     }
+  }
+
+  dynamic analysisResult() async{
+    AbsaAPIResponse absaAPIResponse= AbsaAPIResponse();
   }
 }
