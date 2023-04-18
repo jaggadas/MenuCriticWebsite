@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menucritic/Screens/ReviewsPage.dart';
 import 'package:menucritic/Screens/dashboard.dart';
 
 import '../models/Review.dart';
@@ -16,15 +17,18 @@ class AllReviewsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(children: [
           Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: ListView.builder(shrinkWrap: true,itemCount: reviews.length,itemBuilder: (BuildContext context ,int index){
-              return  Container(padding: EdgeInsets.all(10),
-                  width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                  child: Text( '${index+1}. ${reviews[index].reviewText}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
+            padding: const EdgeInsets.all(20.0),
+            child: BoxWithShadowHeightless(
+              title: 'All Reviews List',
+              child: ListView.builder(shrinkWrap: true,itemCount: reviews.length,itemBuilder: (BuildContext context ,int index){
+                return  Container(padding: EdgeInsets.all(10),
+                    width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
+                    child: Text( '${index+1}. ${reviews[index].reviewText}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
 
 
 
-            }),
+              }),
+            ),
           )
 
 

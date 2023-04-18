@@ -420,3 +420,39 @@ class BoxWithShadow extends StatelessWidget {
     );
   }
 }
+
+class BoxWithShadowHeightless extends StatelessWidget {
+
+  Widget child;
+  String title;
+
+
+  BoxWithShadowHeightless({required this.child,required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Material(color: Colors.white,elevation: 20,borderRadius: BorderRadius.circular(10),child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+
+                  ],
+                ),
+                SizedBox(height: 40,),
+                child,
+                SizedBox(height: 20,)
+              ],
+            ),
+          ),
+        ),
+      ),
+      ),
+    );
+  }
+}
