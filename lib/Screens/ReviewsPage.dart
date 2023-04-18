@@ -1,5 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:menucritic/Screens/AllReviewsPage.dart';
+import 'package:menucritic/Screens/PositiveReviewsPage.dart';
+import 'package:menucritic/Screens/RatingsPage.dart';
 import 'package:menucritic/utils/ABSAApi.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pie_chart/pie_chart.dart' as pi;
@@ -35,9 +38,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
   int threeStarReviews=0;
   int twoStarReviews=0;
   int oneStarReviews=0;
-  List<String> reviews = ["The food was really good, and the pricing was great!","Terrible food, especially the prawn tempura","Service very slow, took an hour for our food to be delivered.",
-    "The food was really good, and the pricing was great!","The food was really good, and the pricing was great!",
-  ];//to be generated in code
+  Map<String,List<Review>> ratingMap={'5':[],'4':[],'3':[],'2':[],'1':[]};
+  Map<String,List<String>> positiveReviewMap={'Positive':[],'Negative':[]};
   List<ReviewAnalysis> reviewAnalysis = [];
   bool showSpinner = false;
   List<Color> gradientColors = [
@@ -95,7 +97,10 @@ class _ReviewsPageState extends State<ReviewsPage> {
     setState(() {
 
     });
-    for(Review review in widget.reviews){
+    //TODO: change to default widget.reviews
+    for(Review review in widget.reviews)
+    // for(int i=0;i<0;i++)
+    {
         reviewAnalysis.add(await AbsaAPIResponse().getReviewAnalysis(review.reviewText));
     }
     showSpinner=false;
@@ -117,8 +122,14 @@ class _ReviewsPageState extends State<ReviewsPage> {
      }
      if(positive>=negative){
        positiveNegativeMap.update('Positive', (value) => value + 1);
+       List<String>? val = positiveReviewMap['Positive'];
+       val!.add(reviewAnal.reviewText);
+       positiveReviewMap.update('Positive', (value) => val);
      }else{
        positiveNegativeMap.update('Negative', (value) => value + 1);
+       List<String>? val = positiveReviewMap['Negative'];
+       val!.add(reviewAnal.reviewText);
+       positiveReviewMap.update('Negative', (value) => val);
      }
    }
    setState(() {
@@ -129,18 +140,53 @@ class _ReviewsPageState extends State<ReviewsPage> {
     for(Review review in widget.reviews){
       if(review.rating==5){
         fiveStarReviews++;
+        if(!ratingMap.containsKey('5')){
+          ratingMap.putIfAbsent('5', () =>[review]);
+        }else{
+          List<Review>? val = ratingMap['5'];
+          val!.add(review);
+          ratingMap.update('5', (value) => val);
+        }
       }else if (review.rating==4){
         fourStarReviews++;
+        if(!ratingMap.containsKey('4')){
+          ratingMap.putIfAbsent('4', () =>[review]);
+        }else{
+          List<Review>? val = ratingMap['4'];
+          val!.add(review);
+          ratingMap.update('4', (value) => val);
+        }
       }else if (review.rating==3){
         threeStarReviews++;
+        if(!ratingMap.containsKey('3')){
+          ratingMap.putIfAbsent('3', () =>[review]);
+        }else{
+          List<Review>? val = ratingMap['3'];
+          val!.add(review);
+          ratingMap.update('3', (value) => val);
+        }
       }else if (review.rating==2){
         twoStarReviews++;
+        if(!ratingMap.containsKey('2')){
+          ratingMap.putIfAbsent('2', () =>[review]);
+        }else{
+          List<Review>? val = ratingMap['2'];
+          val!.add(review);
+          ratingMap.update('2', (value) => val);
+        }
       }else if (review.rating==1){
         oneStarReviews++;
+        if(!ratingMap.containsKey('1')){
+          ratingMap.putIfAbsent('1', () =>[review]);
+        }else{
+          List<Review>? val = ratingMap['1'];
+          val!.add(review);
+          ratingMap.update('1', (value) => val);
+        }
       }
     }
     setState(() {
-
+      print(ratingMap);
     });
   }
   generateGraphs()async{
@@ -172,7 +218,9 @@ class _ReviewsPageState extends State<ReviewsPage> {
               Row(
                 children: [
                   BoxWithShadow(
-                      title: "Star Rating",buttonTitle: "Open All Reviews ",onPressed: (){},
+                      title: "Star Rating",buttonTitle: "Open All Reviews ",onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context){
+                      return RatingsPage(map: ratingMap);
+                  }));},
                       child:
                       // Text('hello'),
                      Column(children: [
@@ -189,7 +237,12 @@ class _ReviewsPageState extends State<ReviewsPage> {
               Row(
                 children: [
                   BoxWithShadow(
-                      title: "Positivity of Reviews",buttonTitle: "Open All Reviews ",onPressed: (){},
+                      title: "Positivity of Reviews",buttonTitle: "Open All Reviews ",onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return PositiveReviewsPage(reviews: positiveReviewMap);
+                        }));
+
+                  },
                       child:
                   pi.PieChart(
                     dataMap: positiveNegativeMap,
@@ -213,31 +266,34 @@ class _ReviewsPageState extends State<ReviewsPage> {
                       ),
                     ),
                     chartValuesOptions: pi.ChartValuesOptions(showChartValues: false),
-
-                    // gradientList: ---To add gradient colors---
-                    // emptyColorGradient: ---Empty Color gradient---
                   )
                   ),
                   SizedBox(width: 8,),
                   BoxWithShadow(
-                      title: "All Reviews",buttonTitle: "Open All Reviews ",onPressed: (){},
-                      child:ListView.builder(shrinkWrap: true,
-                          itemCount: reviews.length,
-                          itemBuilder: (BuildContext context ,int index){
-                                return
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(padding:const EdgeInsets.all(15.0) ,width: double.infinity,
-                                            color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                                            child: Text("${index+1}. ${reviews[index]}",style: TextStyle(fontSize: 18),)),
-                                        Container(height: 2,width: double.infinity,color: Color(0x30adadad),)
-                                      ],
-                                    ),
-                                  );
+                      title: "All Reviews",buttonTitle: "Open All Reviews ",onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return AllReviewsPage(reviews: widget.reviews);
+                        }));
+                  },
+                      child:SingleChildScrollView(
+                        child: ListView.builder(shrinkWrap: true,
+                            itemCount: 5,
+                            itemBuilder: (BuildContext context ,int index){
+                                  return
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(padding:const EdgeInsets.all(15.0) ,width: double.infinity,
+                                              color: index%2==0?Color(0xffF1FAFE):Colors.white,
+                                              child: Text("${index+1}. ${widget.reviews[index].reviewText}",style: TextStyle(fontSize: 18),)),
+                                          Container(height: 2,width: double.infinity,color: Color(0x30adadad),)
+                                        ],
+                                      ),
+                                    );
 
-                          }
+                            }
+                        ),
                       )
                   ),
                 ],
@@ -343,18 +399,20 @@ class BoxWithShadow extends StatelessWidget {
       child: Material(color: Colors.white,elevation: 20,borderRadius: BorderRadius.circular(10),child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(height: MediaQuery.of(context).size.height/2,
-          child: Column(
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                  GestureDetector(onTap: onPressed,child: Text(buttonTitle,style: TextStyle(color: Colors.blueAccent),)),
-                ],
-              ),
-              SizedBox(height: 40,),
-              child,
-              SizedBox(height: 20,)
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                    GestureDetector(onTap: onPressed,child: Text(buttonTitle,style: TextStyle(color: Colors.blueAccent),)),
+                  ],
+                ),
+                SizedBox(height: 40,),
+                child,
+                SizedBox(height: 20,)
+              ],
+            ),
           ),
         ),
       ),
