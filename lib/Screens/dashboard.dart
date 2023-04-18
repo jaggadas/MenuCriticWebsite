@@ -42,17 +42,18 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        width: _isOpen(),
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                mode = sd.SideMenuDisplayMode.open;
-                              });
-                            },
-                            child: Image.asset(
-                              'assets/Images/MenuCriticLogoTrans.png',height: 100,width: 200,
-                            ))),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30.0),
+                      child: SizedBox(
+                          width: 300,
+                          child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  mode = sd.SideMenuDisplayMode.open;
+                                });
+                              },
+                              child:Text("MenuCritic",style: GoogleFonts.robotoSlab(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.white),),)),
+                    )
 
                   ],
                 ),
