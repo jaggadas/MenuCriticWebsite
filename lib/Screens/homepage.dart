@@ -45,17 +45,18 @@ class _MyHomepageState extends State<MyHomepage> {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return Scaffold(
+      return Scaffold(backgroundColor: Color(0xFFF2F2F2),
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Container(
-              child: Row(
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              Container(height: MediaQuery.of(context).size.height,
                 color: Color(0xFFF2F2F2),
                 width: MediaQuery.of(context).size.width / 2,
-                child: Column(
+                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: 50,),
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Container(
@@ -66,30 +67,13 @@ class _MyHomepageState extends State<MyHomepage> {
                             color: Color(0xFF27293D),
                           )),
                     ),
-                    SizedBox(height: 100,),
+                    SizedBox(height: 50,),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2,
+                      width: MediaQuery.of(context).size.width / 2.5,
                       child: Center(
-                        child: new RichText(
-                          text: new TextSpan(
-                            children: [
-                              new TextSpan(
-                                text:
-                                    'To find the Google Place id of a place,  ',
-                                style: new TextStyle(color: Color(0xFF3A5271), fontSize: 5.sp),
-                              ),
-                              new TextSpan(
-                                text: 'Click here',
-                                style: new TextStyle(color: Colors.blue, fontSize: 5.sp),
-                                recognizer: new TapGestureRecognizer()
-                                  ..onTap = () {
-                                    launchUrl(Uri.parse(
-                                        'https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder'));
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
+                        child:Text('Uncover the hidden sentiment of restaurant reviews and visualize customer preferences with ease.'
+                        ,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),textAlign: TextAlign.center,
+                        )
                       ),
                     ),
                     SizedBox(height: 50,),
@@ -162,11 +146,41 @@ class _MyHomepageState extends State<MyHomepage> {
                         ),
                       ),
                     ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Center(
+                          child: new RichText(
+                            text: new TextSpan(
+                              children: [
+                                new TextSpan(
+                                  text:
+                                  'To find the Google Place ID of a place,  ',
+                                  style: new TextStyle(color: Color(0xFF3A5271), fontSize: 4.sp),
+                                ),
+                                new TextSpan(
+                                  text: 'Click here',
+                                  style: new TextStyle(color: Colors.blue, fontSize: 4.sp),
+                                  recognizer: new TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launchUrl(Uri.parse(
+                                          'https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder'));
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30,)
                   ],
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 2,
+
                   child: Image.asset(
                     'assets/Images/Background.png',
                   )),
