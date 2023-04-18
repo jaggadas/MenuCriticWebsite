@@ -32,8 +32,11 @@ class GoogleApiResponse{
       //TODO:test
       var reviews = data!["data"][0]["reviews_data"];
       for(var review in reviews){
-        Review reviewObject = Review(reviewText: review["review_text"] ?? "", rating: review["review_rating"] ?? 1, date: review["review_datetime_utc"]??"", id: 1);
-        reviewObjects.add(reviewObject);
+        if(review["review_text"]!= null)
+          {
+            Review reviewObject = Review(reviewText: review["review_text"] ?? "", rating: review["review_rating"] ?? 1, date: review["review_datetime_utc"]??"", id: 1);
+            reviewObjects.add(reviewObject);
+          }
       }
       debugPrint(reviewObjects.toString());
       return reviewObjects;
