@@ -580,7 +580,9 @@ class _ReviewsPageState extends State<ReviewsPage> {
   }
 }
 
+
 class BoxWithShadow extends StatelessWidget {
+
   Widget child;
   String title;
   String buttonTitle;
@@ -640,6 +642,7 @@ class BoxWithShadow extends StatelessWidget {
 }
 
 class BoxWithShadowHeightless extends StatelessWidget {
+
   Widget child;
   String title;
 
