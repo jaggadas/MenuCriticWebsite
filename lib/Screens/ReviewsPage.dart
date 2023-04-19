@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:menucritic/Screens/AllReviewsPage.dart';
 import 'package:menucritic/Screens/PositiveReviewsPage.dart';
 import 'package:menucritic/Screens/RatingsPage.dart';
+import 'package:menucritic/models/CategoriesPositivity.dart';
 import 'package:menucritic/utils/ABSAApi.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:pie_chart/pie_chart.dart' as pi;
@@ -13,30 +14,45 @@ import '../models/ReviewAnalysis.dart';
 import '../utils/constants.dart';
 
 class ReviewsPage extends StatefulWidget {
-  ReviewsPage({required this.reviews}){
+  ReviewsPage({required this.reviews}) {
     debugPrint("number of reviews :${reviews.length}");
   }
+
   List<Review> reviews;
+
   @override
   State<ReviewsPage> createState() => _ReviewsPageState();
 }
 
 class _ReviewsPageState extends State<ReviewsPage> {
-
-  List<Color> colorsPositiveNegative=[Color(0xff1E1E2C),Color(0xff455880)];
-  Map<String, double> Categories = {
-   //idhar add karna hai
-  };// to be generated in code
-  List<Color> colorsCategory=[Color(0xff79e06c),Color(0xffeb5146),Colors.blue,Colors.deepOrangeAccent];// to be generated in code
-  List<String> positiveCategories=["Ambience","Food"];
-  List<String> negativeCategories=["Time","Service","Pricing"];
-  int fiveStarReviews=0;
-  int fourStarReviews=0;
-  int threeStarReviews=0;
-  int twoStarReviews=0;
-  int oneStarReviews=0;
-  Map<String,List<Review>> ratingMap={'5':[],'4':[],'3':[],'2':[],'1':[]};
-  Map<String,List<String>> positiveReviewMap={'Positive':[],'Negative':[]};
+  List<Color> colorsPositiveNegative = [Color(0xff1E1E2C), Color(0xff455880)];
+  Map<String, double> categories = {}; // to be generated in code
+  Map<String, List<String>> categoriesMap={};
+  Map<String, CategoriesPositivity> positiveAspectsCountMap= {};
+  List<Color> colorsCategory = [
+    Color(0xff79e06c),
+    Color(0xffeb5146),
+    Colors.blue,
+    Colors.deepOrangeAccent
+  ]; // to be generated in code
+  List<String> positiveCategories = [];
+  List<String> negativeCategories = [];
+  int fiveStarReviews = 0;
+  int fourStarReviews = 0;
+  int threeStarReviews = 0;
+  int twoStarReviews = 0;
+  int oneStarReviews = 0;
+  Map<String, List<Review>> ratingMap = {
+    '5': [],
+    '4': [],
+    '3': [],
+    '2': [],
+    '1': []
+  };
+  Map<String, List<String>> positiveReviewMap = {
+    'Positive': [],
+    'Negative': []
+  };
   List<ReviewAnalysis> reviewAnalysis = [];
   bool showSpinner = false;
   List<Color> gradientColors = [
@@ -44,14 +60,21 @@ class _ReviewsPageState extends State<ReviewsPage> {
     AppColors.contentColorBlue,
   ];
   Map<String, double> positiveNegativeMap = {
-    "Positive":0,
-    "Negative":0
-  };//to be generated in code
-  Widget _buildRatingBar(String ratingText, int ratingCount, int totalReviews, int stars) {
+    "Positive": 0,
+    "Negative": 0
+  }; //to be generated in code
+  Widget _buildRatingBar(
+      String ratingText, int ratingCount, int totalReviews, int stars) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("$stars stars",style: TextStyle(color: Color(0xff1E1E2C),fontSize: 16,fontWeight: FontWeight.bold),),
+        Text(
+          "$stars stars",
+          style: TextStyle(
+              color: Color(0xff1E1E2C),
+              fontSize: 16,
+              fontWeight: FontWeight.bold),
+        ),
         Container(
           height: 15,
           decoration: BoxDecoration(
@@ -67,130 +90,203 @@ class _ReviewsPageState extends State<ReviewsPage> {
             ),
           ),
         ),
-        SizedBox(height: 10,)
-
+        SizedBox(
+          height: 10,
+        )
       ],
     );
   }
+
   Color lighten(Color color, [double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
 
     final hsl = HSLColor.fromColor(color);
-    final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
     return hslLight.toColor();
   }
+
   List<Color> lighterShadesOfColor(int n) {
     final List<Color> shades = [];
     final Color baseColor = Color(0xff0a0e1a);
-    final double amountPerShade = 0.4 / n;
+    final double amountPerShade = 0.7 / n;
     for (int i = 0; i < n; i++) {
       shades.add(lighten(baseColor, amountPerShade * i));
     }
     return shades;
   }
+
   sendReviewsToModel() async {
     showSpinner = true;
-    setState(() {
-
-    });
+    setState(() {});
     //TODO: change to default widget.reviews
-    for(Review review in widget.reviews)
+    for (Review review in widget.reviews)
     // for(int i=0;i<0;i++)
     {
-        reviewAnalysis.add(await AbsaAPIResponse().getReviewAnalysis(review.reviewText));
+      reviewAnalysis
+          .add(await AbsaAPIResponse().getReviewAnalysis(review.reviewText));
     }
-    showSpinner=false;
+    showSpinner = false;
+    setState(() {});
+  }
+
+  generatePositiveNegative() {
+    for (ReviewAnalysis reviewAnal in reviewAnalysis) {
+      int positive = 0;
+      int negative = 0;
+      for (Analysis analysis in reviewAnal.analysis) {
+        if (analysis.analysisClass == 2) {
+          positive++;
+        } else {
+          negative++;
+        }
+      }
+      if (positive >= negative) {
+        positiveNegativeMap.update('Positive', (value) => value + 1);
+        List<String>? val = positiveReviewMap['Positive'];
+        val!.add(reviewAnal.reviewText);
+        positiveReviewMap.update('Positive', (value) => val);
+      } else {
+        positiveNegativeMap.update('Negative', (value) => value + 1);
+        List<String>? val = positiveReviewMap['Negative'];
+        val!.add(reviewAnal.reviewText);
+        positiveReviewMap.update('Negative', (value) => val);
+      }
+    }
+    setState(() {});
+  }
+
+  generateCategories() {
+    for (ReviewAnalysis reviewAnal in reviewAnalysis) {
+      for (Analysis analysis in reviewAnal.analysis) {
+        if (categories.containsKey('${analysis.term}')) {
+          categories.update('${analysis.term}', (value) => value + 1);
+          if(categoriesMap.containsKey('${analysis.term}'))
+            {
+              List<String>? val= categoriesMap['${analysis.term}'];
+              val?.add(reviewAnal.reviewText);
+              categoriesMap.update('${analysis.term}', (value) => val!);
+            }
+        } else {
+          categories.putIfAbsent('${analysis.term}', () => 1);
+         categoriesMap.putIfAbsent('${analysis.term}', () => [reviewAnal.reviewText]);
+        }
+      }
+    }
+
+      categories.removeWhere((key, value) => value <= 2);
+
+    for(var entry in categoriesMap.entries)
+      {
+        if(!categories.containsKey(entry))
+          {
+            categoriesMap.remove(entry);
+          }
+      }
+    setState(() {});
+
+  }
+
+  generatePositiveAspects(){
+
+    for(ReviewAnalysis reviewAnal in reviewAnalysis)
+      {
+        for(Analysis analysis in reviewAnal.analysis)
+          {
+            if(analysis.analysisClass==2)
+              {
+                if(!positiveAspectsCountMap.containsKey('${analysis.term}'))
+              {
+               positiveAspectsCountMap.putIfAbsent('${analysis.term}', () =>CategoriesPositivity('${analysis.term}',1 , 0));
+              }
+                else{
+                  positiveAspectsCountMap.update('${analysis.term}', (value) => CategoriesPositivity('${analysis.term}', value.positiveCount+1, value.negativeCount));
+                }
+              }
+            else
+              {
+                if(!positiveAspectsCountMap.containsKey('${analysis.term}'))
+                {
+                  positiveAspectsCountMap.putIfAbsent('${analysis.term}', () =>CategoriesPositivity('${analysis.term}',0 , 1));
+                }
+                else{
+                  positiveAspectsCountMap.update('${analysis.term}', (value) => CategoriesPositivity('${analysis.term}', value.positiveCount, value.negativeCount+1));
+                }
+              }
+          }
+      }
+    for(var entry in positiveAspectsCountMap.entries)
+    {
+      if(!categoriesMap.containsKey(entry))
+      {
+        positiveAspectsCountMap.remove(entry);
+      }
+    }
+    print('positive $positiveAspectsCountMap');
+  }
+
+  generateListPositiveAspects(){
+    for(var entry in positiveAspectsCountMap.entries)
+      {
+        if(entry.value.positiveCount>= entry.value.negativeCount)
+          {
+            positiveCategories.add(entry.key);
+          }
+        else
+          {
+            negativeCategories.add(entry.key);
+          }
+      }
+
     setState(() {
 
     });
   }
-  generatePositiveNegative(){
 
-   for(ReviewAnalysis reviewAnal in reviewAnalysis){
-     int positive=0;
-     int negative=0;
-     for(Analysis analysis in reviewAnal.analysis){
-       if(analysis.analysisClass ==2){
-         positive++;
-       }else{
-         negative++;
-       }
-     }
-     if(positive>=negative){
-       positiveNegativeMap.update('Positive', (value) => value + 1);
-       List<String>? val = positiveReviewMap['Positive'];
-       val!.add(reviewAnal.reviewText);
-       positiveReviewMap.update('Positive', (value) => val);
-     }else{
-       positiveNegativeMap.update('Negative', (value) => value + 1);
-       List<String>? val = positiveReviewMap['Negative'];
-       val!.add(reviewAnal.reviewText);
-       positiveReviewMap.update('Negative', (value) => val);
-     }
-   }
-   setState(() {
-
-   });
-  }
-  generateCategories()
-  {
-    for(ReviewAnalysis reviewAnal in reviewAnalysis){
-      
-      for(Analysis analysis in reviewAnal.analysis){
-        if(Categories.containsKey('${analysis.term}')) {
-          Categories.update(analysis.term, (value) => value + 1);
-        }
-        else{
-
-        }
-      }
-      
-    }
-  }
-  generateStarRating(){
-    for(Review review in widget.reviews){
-      if(review.rating==5){
+  generateStarRating() {
+    for (Review review in widget.reviews) {
+      if (review.rating == 5) {
         fiveStarReviews++;
-        if(!ratingMap.containsKey('5')){
-          ratingMap.putIfAbsent('5', () =>[review]);
-        }else{
+        if (!ratingMap.containsKey('5')) {
+          ratingMap.putIfAbsent('5', () => [review]);
+        } else {
           List<Review>? val = ratingMap['5'];
           val!.add(review);
           ratingMap.update('5', (value) => val);
         }
-      }else if (review.rating==4){
+      } else if (review.rating == 4) {
         fourStarReviews++;
-        if(!ratingMap.containsKey('4')){
-          ratingMap.putIfAbsent('4', () =>[review]);
-        }else{
+        if (!ratingMap.containsKey('4')) {
+          ratingMap.putIfAbsent('4', () => [review]);
+        } else {
           List<Review>? val = ratingMap['4'];
           val!.add(review);
           ratingMap.update('4', (value) => val);
         }
-      }else if (review.rating==3){
+      } else if (review.rating == 3) {
         threeStarReviews++;
-        if(!ratingMap.containsKey('3')){
-          ratingMap.putIfAbsent('3', () =>[review]);
-        }else{
+        if (!ratingMap.containsKey('3')) {
+          ratingMap.putIfAbsent('3', () => [review]);
+        } else {
           List<Review>? val = ratingMap['3'];
           val!.add(review);
           ratingMap.update('3', (value) => val);
         }
-      }else if (review.rating==2){
+      } else if (review.rating == 2) {
         twoStarReviews++;
-        if(!ratingMap.containsKey('2')){
-          ratingMap.putIfAbsent('2', () =>[review]);
-        }else{
+        if (!ratingMap.containsKey('2')) {
+          ratingMap.putIfAbsent('2', () => [review]);
+        } else {
           List<Review>? val = ratingMap['2'];
           val!.add(review);
           ratingMap.update('2', (value) => val);
         }
-      }else if (review.rating==1){
+      } else if (review.rating == 1) {
         oneStarReviews++;
-        if(!ratingMap.containsKey('1')){
-          ratingMap.putIfAbsent('1', () =>[review]);
-        }else{
+        if (!ratingMap.containsKey('1')) {
+          ratingMap.putIfAbsent('1', () => [review]);
+        } else {
           List<Review>? val = ratingMap['1'];
           val!.add(review);
           ratingMap.update('1', (value) => val);
@@ -198,21 +294,26 @@ class _ReviewsPageState extends State<ReviewsPage> {
       }
     }
     setState(() {
-      print(ratingMap);
+
     });
   }
-  generateGraphs()async{
+
+  generateGraphs() async {
     await sendReviewsToModel();
     generatePositiveNegative();
     generateStarRating();
-    //idhar hi aayega function graph ka
+    generateCategories();
+    generatePositiveAspects();
+    generateListPositiveAspects();
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     generateGraphs();
   }
+
   @override
   Widget build(BuildContext context) {
     int totalReviews = fiveStarReviews +
@@ -220,251 +321,365 @@ class _ReviewsPageState extends State<ReviewsPage> {
         threeStarReviews +
         twoStarReviews +
         oneStarReviews;
-    return Scaffold(backgroundColor: Color(0xffdbdbdb),appBar: AppBar(backgroundColor: Color(0xffF1FAFE),leading: IconButton(onPressed: (){Navigator.pop(context);},
-        icon:Icon(Icons.arrow_back_ios_rounded),color: Color(0xff1E1E2C),)),body:
-      ModalProgressHUD(inAsyncCall: showSpinner,
-        child: showSpinner?Container():Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(children: [
-
-              Row(
-                children: [
-                  BoxWithShadow(
-                      title: "Star Rating",buttonTitle: "Open All Reviews ",onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context){
-                      return RatingsPage(map: ratingMap);
-                  }));},
-                      child:
-                      // Text('hello'),
-                     Column(children: [
-                       _buildRatingBar("5 Stars", fiveStarReviews, totalReviews,5),
-                       _buildRatingBar("4 Stars", fourStarReviews, totalReviews,4),
-                       _buildRatingBar("3 Stars", threeStarReviews, totalReviews,3),
-                       _buildRatingBar("2 Stars", twoStarReviews, totalReviews,2),
-                       _buildRatingBar("1 Star", oneStarReviews, totalReviews,1),
-                     ],)
-                  ),
-                ],
-              ),
-              SizedBox(height: 8,),
-              Row(
-                children: [
-                  BoxWithShadow(
-                      title: "Positivity of Reviews",buttonTitle: "Open All Reviews ",onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return PositiveReviewsPage(reviews: positiveReviewMap);
-                        }));
-
-                  },
-                      child:
-                  pi.PieChart(
-                    dataMap: positiveNegativeMap,
-                    animationDuration: Duration(milliseconds: 800),
-                    chartLegendSpacing: 32,
-                    chartRadius: MediaQuery.of(context).size.width / 6,
-                    colorList: colorsPositiveNegative,
-                    initialAngleInDegree: 0,
-                    chartType: pi.ChartType.ring,
-                    ringStrokeWidth: 32,
-                    centerText: "${(positiveNegativeMap['Positive']! / (positiveNegativeMap['Positive']! + positiveNegativeMap['Negative']!) * 100)
-                        .toStringAsFixed(1)
-                        }%",centerTextStyle: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),
-                    legendOptions: pi.LegendOptions(
-                      showLegendsInRow: false,
-                      legendPosition: pi.LegendPosition.right,
-                      showLegends: true,
-                      legendShape: BoxShape.circle,
-                      legendTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    chartValuesOptions: pi.ChartValuesOptions(showChartValues: false),
-                  )
-                  ),
-                  SizedBox(width: 8,),
-                  BoxWithShadow(
-                      title: "All Reviews",buttonTitle: "Open All Reviews ",onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return AllReviewsPage(reviews: widget.reviews);
-                        }));
-                  },
-                      child:SingleChildScrollView(
-                        child: ListView.builder(shrinkWrap: true,
-                            itemCount: 5,
-                            itemBuilder: (BuildContext context ,int index){
-                                  return
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(padding:const EdgeInsets.all(15.0) ,width: double.infinity,
-                                              color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                                              child: Text("${index+1}. ${widget.reviews[index].reviewText}",style: TextStyle(fontSize: 18),)),
-                                          Container(height: 2,width: double.infinity,color: Color(0x30adadad),)
-                                        ],
-                                      ),
-                                    );
-
-                            }
-                        ),
-                      )
-                  ),
-                ],
-              ),
-              SizedBox(height: 8,),
-              Row(
-                children: [
-                  BoxWithShadow(
-                      title: "Categories of Aspects",buttonTitle: "Open All Reviews ",onPressed: (){},
-                      child:
-                      // Text('hello'),
-                      pi.PieChart(
-                        dataMap: Categories,
-                        animationDuration: Duration(milliseconds: 800),
-                        chartLegendSpacing: 32,
-                        chartRadius: MediaQuery.of(context).size.width / 6,
-                        colorList: lighterShadesOfColor(Categories.length),
-                        initialAngleInDegree: 0,
-                        chartType: pi.ChartType.ring,
-                        ringStrokeWidth: 32,
-                        centerText: "Categories",centerTextStyle: TextStyle(fontSize: 40),
-                        legendOptions: pi.LegendOptions(
-                          showLegendsInRow: false,
-                          legendPosition: pi.LegendPosition.right,
-                          showLegends: true,
-                          legendShape: BoxShape.circle,
-                          legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        chartValuesOptions: pi.ChartValuesOptions(
-                          showChartValueBackground: false,
-                          showChartValues: true,
-                          showChartValuesInPercentage: true,
-                          showChartValuesOutside: false,
-                          decimalPlaces: 0,
-                          chartValueStyle: TextStyle(fontSize: 15)
-                        ),
-                        // gradientList: ---To add gradient colors---
-                        // emptyColorGradient: ---Empty Color gradient---
-                      )
-                  ),
-                  SizedBox(width: 8,),
-                  BoxWithShadow(
-                      title: "Positivity of Categories",buttonTitle: "Open All Reviews ",onPressed: (){},
-                      child:
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: Color(0xffdbdbdb),
+      appBar: AppBar(
+          backgroundColor: Color(0xffF1FAFE),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_rounded),
+            color: Color(0xff1E1E2C),
+          )),
+      body: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: showSpinner
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          Container(width:280,
-                            child: ListView.builder(shrinkWrap: true,
-                                itemCount: positiveCategories.length,
-                                itemBuilder: (BuildContext context ,int index){
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
-                                        color:Color(0x5079e06c)
-                                    ),padding: EdgeInsets.all(10),child: Text("${index+1}. ${positiveCategories[index]}",style: TextStyle(fontSize: 18),)),
-                                  );
-                                }
-                            ),
-                          ),
-                          Container(width: 280,
-                            child: ListView.builder(shrinkWrap: true,
-                                itemCount: negativeCategories.length,
-                                itemBuilder: (BuildContext context ,int index){
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
-                                        color:Color(0x50e08b6c)
-                                    ),padding: EdgeInsets.all(10),child: Text("${index+1}. ${negativeCategories[index]}",style: TextStyle(fontSize: 18),)),
-                                  );
-                                }
-                            ),
-                          ),
+                          BoxWithShadow(
+                              title: "Star Rating",
+                              buttonTitle: "Open All Reviews ",
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return RatingsPage(map: ratingMap);
+                                }));
+                              },
+                              child:
+                                  // Text('hello'),
+                                  Column(
+                                children: [
+                                  _buildRatingBar("5 Stars", fiveStarReviews,
+                                      totalReviews, 5),
+                                  _buildRatingBar("4 Stars", fourStarReviews,
+                                      totalReviews, 4),
+                                  _buildRatingBar("3 Stars", threeStarReviews,
+                                      totalReviews, 3),
+                                  _buildRatingBar("2 Stars", twoStarReviews,
+                                      totalReviews, 2),
+                                  _buildRatingBar("1 Star", oneStarReviews,
+                                      totalReviews, 1),
+                                ],
+                              )),
                         ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          BoxWithShadow(
+                              title: "Positivity of Reviews",
+                              buttonTitle: "Open All Reviews ",
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return PositiveReviewsPage(
+                                      reviews: positiveReviewMap);
+                                }));
+                              },
+                              child: pi.PieChart(
+                                dataMap: positiveNegativeMap,
+                                animationDuration: Duration(milliseconds: 800),
+                                chartLegendSpacing: 32,
+                                chartRadius:
+                                    MediaQuery.of(context).size.width / 6,
+                                colorList: colorsPositiveNegative,
+                                initialAngleInDegree: 0,
+                                chartType: pi.ChartType.ring,
+                                ringStrokeWidth: 32,
+                                centerText:
+                                    "${(positiveNegativeMap['Positive']! / (positiveNegativeMap['Positive']! + positiveNegativeMap['Negative']!) * 100).toStringAsFixed(1)}%",
+                                centerTextStyle: TextStyle(
+                                    fontSize: 40, fontWeight: FontWeight.bold),
+                                legendOptions: pi.LegendOptions(
+                                  showLegendsInRow: false,
+                                  legendPosition: pi.LegendPosition.right,
+                                  showLegends: true,
+                                  legendShape: BoxShape.circle,
+                                  legendTextStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                chartValuesOptions: pi.ChartValuesOptions(
+                                    showChartValues: false),
+                              )),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxWithShadow(
+                              title: "All Reviews",
+                              buttonTitle: "Open All Reviews ",
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return AllReviewsPage(
+                                      reviews: widget.reviews);
+                                }));
+                              },
+                              child: SingleChildScrollView(
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: 5,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                width: double.infinity,
+                                                color: index % 2 == 0
+                                                    ? Color(0xffF1FAFE)
+                                                    : Colors.white,
+                                                child: Text(
+                                                  "${index + 1}. ${widget.reviews[index].reviewText}",
+                                                  style:
+                                                      TextStyle(fontSize: 18),
+                                                )),
+                                            Container(
+                                              height: 2,
+                                              width: double.infinity,
+                                              color: Color(0x30adadad),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          BoxWithShadow(
+                              title: "Categories of Aspects",
+                              buttonTitle: "Open All Reviews ",
+                              onPressed: () {},
+                              child:
+                                  // Text('hello'),
+                                  pi.PieChart(
+                                dataMap: categories,
+                                animationDuration: Duration(milliseconds: 800),
+                                chartLegendSpacing: 32,
+                                chartRadius:
+                                    MediaQuery.of(context).size.width / 6,
+                                colorList:
+                                    lighterShadesOfColor(categories.length),
+                                initialAngleInDegree: 0,
+                                chartType: pi.ChartType.ring,
+                                ringStrokeWidth: 32,
+                                centerText: "Categories",
+                                centerTextStyle: TextStyle(fontSize: 25),
+                                legendOptions: pi.LegendOptions(
+                                  showLegendsInRow: false,
+                                  legendPosition: pi.LegendPosition.right,
+                                  showLegends: true,
+                                  legendShape: BoxShape.circle,
+                                  legendTextStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                chartValuesOptions: pi.ChartValuesOptions(
+                                    showChartValueBackground: false,
+                                    showChartValues: true,
+                                    showChartValuesInPercentage: true,
+                                    showChartValuesOutside: false,
+                                    decimalPlaces: 0,
+                                    chartValueStyle: TextStyle(fontSize: 15)),
+                                // gradientList: ---To add gradient colors---
+                                // emptyColorGradient: ---Empty Color gradient---
+                              )),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          BoxWithShadow(
+                              title: "Positivity of Categories",
+                              buttonTitle: "Open All Reviews ",
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 280,
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: positiveCategories.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    color: Color(0x5079e06c)),
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  "${index + 1}. ${positiveCategories[index]}",
+                                                  style:
+                                                      TextStyle(fontSize: 18),
+                                                )),
+                                          );
+                                        }),
+                                  ),
+                                  Container(
+                                    width: 280,
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: negativeCategories.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    color: Color(0x50e08b6c)),
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  "${index + 1}. ${negativeCategories[index]}",
+                                                  style:
+                                                      TextStyle(fontSize: 18),
+                                                )),
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
                       )
+                    ],
                   ),
-                ],
+                ),
               ),
-              SizedBox(height: 10,)
-            ],),
-          ),
-        ),
-      )
-      ,);
+      ),
+    );
   }
 }
 
-
 class BoxWithShadow extends StatelessWidget {
-
   Widget child;
   String title;
   String buttonTitle;
   VoidCallback onPressed;
 
-
-  BoxWithShadow({required this.child,required this.title, required this.buttonTitle, required this.onPressed});
+  BoxWithShadow(
+      {required this.child,
+      required this.title,
+      required this.buttonTitle,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Material(color: Colors.white,elevation: 20,borderRadius: BorderRadius.circular(10),child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(height: MediaQuery.of(context).size.height/2,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                    GestureDetector(onTap: onPressed,child: Text(buttonTitle,style: TextStyle(color: Colors.blueAccent),)),
-                  ],
-                ),
-                SizedBox(height: 40,),
-                child,
-                SizedBox(height: 20,)
-              ],
+      child: Material(
+        color: Colors.white,
+        elevation: 20,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      GestureDetector(
+                          onTap: onPressed,
+                          child: Text(
+                            buttonTitle,
+                            style: TextStyle(color: Colors.blueAccent),
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  child,
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }
 }
 
 class BoxWithShadowHeightless extends StatelessWidget {
-
   Widget child;
   String title;
 
-
-  BoxWithShadowHeightless({required this.child,required this.title});
+  BoxWithShadowHeightless({required this.child, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Material(color: Colors.white,elevation: 20,borderRadius: BorderRadius.circular(10),child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-
-                  ],
-                ),
-                SizedBox(height: 40,),
-                child,
-                SizedBox(height: 20,)
-              ],
+      child: Material(
+        color: Colors.white,
+        elevation: 20,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  child,
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

@@ -125,7 +125,5 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  dynamic analysisResult() async{
-    AbsaAPIResponse absaAPIResponse= AbsaAPIResponse();
-  }
+
 }
