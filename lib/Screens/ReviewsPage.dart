@@ -229,11 +229,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
   generateListPositiveAspects(){
     for(var entry in positiveAspectsCountMap.entries)
       {
-        if(entry.value.positiveCount>= entry.value.negativeCount)
+        if((entry.value.positiveCount>= entry.value.negativeCount) && categories.containsKey(entry.key))
           {
             positiveCategories.add(entry.key);
           }
-        else
+        else if(categories.containsKey(entry.key))
           {
             negativeCategories.add(entry.key);
           }
