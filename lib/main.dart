@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomepage(),
-      // home: AnimatedSplashScreen(splash: SvgPicture.asset('assets/images/MenuCriticSplashLogo.svg',),duration: 2000,
-      //     splashTransition: SplashTransition.fadeTransition,
-      //     backgroundColor: Color(0xFF1C4E80),
-      //     nextScreen: MyHomepage()),
+      //home: MyHomepage(),
+      home: AnimatedSplashScreen(splash: SvgPicture.asset('assets/images/MenuCriticSplashLogo.svg',),duration: 2000,
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: Color(0xFF1C4E80),
+          nextScreen: MyHomepage()),
     );
   }
 }
