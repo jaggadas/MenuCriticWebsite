@@ -23,7 +23,7 @@ class AllReviewsPage extends StatelessWidget {
               child: ListView.builder(shrinkWrap: true,itemCount: reviews.length,itemBuilder: (BuildContext context ,int index){
                 return  Container(padding: EdgeInsets.all(10),
                     width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                    child: Text( '${index+1}. ${reviews[index].reviewText}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
+                    child: Text( '${index+1}. ${reviews[index].reviewText}',style: Theme.of(context).textTheme.bodyLarge));
 
 
 

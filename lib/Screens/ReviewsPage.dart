@@ -122,11 +122,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
     showSpinner = true;
     setState(() {});
     //TODO: change to default widget.reviews
-    for (Review review in widget.reviews)
-    // for(int i=0;i<0;i++)
+    //for (Review review in widget.reviews)
+     for(int i=0;i<5;i++)
     {
       reviewAnalysis
-          .add(await AbsaAPIResponse().getReviewAnalysis(review.reviewText));
+          .add(await AbsaAPIResponse().getReviewAnalysis(widget.reviews[i].reviewText));
     }
     showSpinner = false;
     setState(() {});

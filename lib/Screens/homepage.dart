@@ -20,7 +20,8 @@ class MyHomepage extends StatefulWidget {
 class _MyHomepageState extends State<MyHomepage> {
   bool showSpinner = false;
   String PlaceId = '';
-
+  String errormsg = '';
+  TextEditingController googleIdController= TextEditingController();
   apiResponse() async {
     if (testmode) {
       TestAPIResponse testAPIResponse = TestAPIResponse();
@@ -83,6 +84,7 @@ class _MyHomepageState extends State<MyHomepage> {
                         onChanged: (value) {
                           PlaceId = value;
                         },
+                        controller: googleIdController,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Color(0xFF2E3048)),
                         decoration: InputDecoration(
@@ -106,6 +108,19 @@ class _MyHomepageState extends State<MyHomepage> {
                         ),
                       ),
                     ),
+                    Visibility(
+                        visible: errormsg == '' ? false : true,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              errormsg,
+                              style: TextStyle(color: Colors.red),
+                            )
+                          ],
+                        )),
                     SizedBox(height: 50,),
                     Container(
                       width: MediaQuery.of(context).size.width / 2.5,
@@ -120,13 +135,21 @@ class _MyHomepageState extends State<MyHomepage> {
                               var reviews = await apiResponse();
                               showSpinner = false;
                               setState(() {});
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Dashboard(
-                                      reviews: reviews ?? [],
-                                    )),
-                              );
+                              if(googleIdController.text=="")
+                              {
+                                errormsg='Please enter a valid google place ID';
+                              }
+                              else
+                                {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Dashboard(
+                                          reviews: reviews ?? [],
+                                        )),
+                                  );
+                                }
+
                             },
                             child: Container(
                               height: 50,
@@ -175,7 +198,8 @@ class _MyHomepageState extends State<MyHomepage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30,)
+                    SizedBox(height: 30,),
+
                   ],
                 ),
               ),

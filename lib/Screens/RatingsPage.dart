@@ -26,7 +26,7 @@ class RatingsPage extends StatelessWidget {
                   itemBuilder: (BuildContext context ,int index){
                     return  Container(padding: EdgeInsets.all(10),
                         width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                        child: Text( '${index+1}. ${map['${5-indexx}']![index].reviewText}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
+                        child: Text( '${index+1}. ${map['${5-indexx}']![index].reviewText}',style: Theme.of(context).textTheme.bodyLarge));
 
                   }),
             ), title: "${5-indexx} star Reviews (${map['${5-indexx}']!.length} reviews)"

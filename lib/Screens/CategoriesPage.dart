@@ -28,7 +28,7 @@ class CategoriesPage extends StatelessWidget {
                     itemBuilder: (BuildContext context ,int index){
                       return  Container(padding: EdgeInsets.all(10),
                           width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                          child: Text( '${index+1}. ${categoriesMap[categoriesMap.entries.elementAt(indexx).key]![index]}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
+                          child: Text( '${index+1}. ${categoriesMap[categoriesMap.entries.elementAt(indexx).key]![index]}',style: Theme.of(context).textTheme.bodyLarge));
 
                     }),
               ),title: "${categoriesMap.entries.elementAt(indexx).key} (${categoriesMap[categoriesMap.entries.elementAt(indexx).key]!.length} reviews)"

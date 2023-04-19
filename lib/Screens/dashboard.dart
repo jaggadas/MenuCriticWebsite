@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart' as sd;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:menucritic/Screens/AboutUsPage.dart';
 import 'package:menucritic/Screens/ReviewsPage.dart';
 import 'package:menucritic/utils/ABSAApi.dart';
 import 'package:menucritic/utils/googleapi.dart';
@@ -108,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                 ReviewsPage(reviews: widget.reviews,),
-                  Container(),
+                  AboutUsPage()
 
                 ],
               ))
