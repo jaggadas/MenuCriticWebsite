@@ -22,10 +22,10 @@ class PositiveReviewsPage extends StatelessWidget {
             children: [
 
             SizedBox(height: MediaQuery.of(context).size.height/2,
-              child: BoxWithShadow(
+              child: BoxWithShadowHeightless(
                 title: "Positive Reviews (${reviews['Positive']!.length} reviews)",
-                buttonTitle: '',
-                onPressed: () {  },
+                // buttonTitle: '',
+                // onPressed: () {  },
                 child:
                     Padding(
                       padding: const EdgeInsets.all(40.0),
@@ -42,10 +42,10 @@ class PositiveReviewsPage extends StatelessWidget {
             ),
             SizedBox(height: 30,),
             SizedBox(height: MediaQuery.of(context).size.height/2,
-              child: BoxWithShadow(
+              child: BoxWithShadowHeightless(
                 title: "Negative Reviews (${reviews['Negative']!.length} reviews)",
-                buttonTitle: '',
-                onPressed: () {  },
+                // buttonTitle: '',
+                // onPressed: () {  },
                 child:
                     Padding(
                       padding: const EdgeInsets.all(40.0),

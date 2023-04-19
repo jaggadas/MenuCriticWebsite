@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:menucritic/Screens/AllReviewsPage.dart';
+import 'package:menucritic/Screens/CategoriesPage.dart';
 import 'package:menucritic/Screens/PositiveReviewsPage.dart';
 import 'package:menucritic/Screens/RatingsPage.dart';
 import 'package:menucritic/models/CategoriesPositivity.dart';
@@ -469,7 +470,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
                           BoxWithShadow(
                               title: "Categories of Aspects",
                               buttonTitle: "Open All Reviews ",
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return CategoriesPage(categoriesMap: categoriesMap);
+                                }));
+                              },
                               child:
                                   // Text('hello'),
                                   pi.PieChart(
@@ -510,7 +515,11 @@ class _ReviewsPageState extends State<ReviewsPage> {
                           BoxWithShadow(
                               title: "Positivity of Categories",
                               buttonTitle: "Open All Reviews ",
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return CategoriesPage(categoriesMap: categoriesMap);
+                                }));
+                              },
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -650,36 +659,34 @@ class BoxWithShadowHeightless extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(
-        color: Colors.white,
-        elevation: 20,
-        borderRadius: BorderRadius.circular(10),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  child,
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              ),
+    return Material(
+      color: Colors.white,
+      elevation: 20,
+      borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                child,
+                SizedBox(
+                  height: 20,
+                )
+              ],
             ),
           ),
         ),
