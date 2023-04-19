@@ -16,7 +16,7 @@ import '../utils/constants.dart';
 
 class ReviewsPage extends StatefulWidget {
   ReviewsPage({required this.reviews}) {
-    debugPrint("number of reviews :${reviews.length}");
+
   }
 
   List<Review> reviews;
@@ -177,14 +177,15 @@ class _ReviewsPageState extends State<ReviewsPage> {
     }
 
       categories.removeWhere((key, value) => value <= 2);
-
-    for(var entry in categoriesMap.entries)
+    var newCategoriesMap= Map.from(categoriesMap);
+    for(var entry in newCategoriesMap.entries)
       {
-        if(!categories.containsKey(entry))
+        if(!categories.containsKey(entry.key))
           {
-            categoriesMap.remove(entry);
+            categoriesMap.remove(entry.key);
           }
       }
+    print(categoriesMap);
     setState(() {});
 
   }
@@ -217,14 +218,14 @@ class _ReviewsPageState extends State<ReviewsPage> {
               }
           }
       }
-    for(var entry in positiveAspectsCountMap.entries)
-    {
-      if(!categoriesMap.containsKey(entry))
-      {
-        positiveAspectsCountMap.remove(entry);
-      }
-    }
-    print('positive $positiveAspectsCountMap');
+    // for(var entry in positiveAspectsCountMap.entries)
+    // {
+    //   if(!categoriesMap.containsKey(entry))
+    //   {
+    //     positiveAspectsCountMap.remove(entry);
+    //   }
+    // }
+
   }
 
   generateListPositiveAspects(){

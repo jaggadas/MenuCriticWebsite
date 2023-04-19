@@ -24,14 +24,14 @@ class CategoriesPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: BoxWithShadowHeightless(child: Container(height: 500,
                 child: ListView.builder(shrinkWrap: true,
-                    itemCount: categoriesMap[categoriesMap.entries.elementAt(indexx)]!.length,
+                    itemCount: categoriesMap[categoriesMap.entries.elementAt(indexx).key]!.length,
                     itemBuilder: (BuildContext context ,int index){
                       return  Container(padding: EdgeInsets.all(10),
                           width: double.infinity,color: index%2==0?Color(0xffF1FAFE):Colors.white,
-                          child: Text( '${index+1}. ${categoriesMap[categoriesMap.entries.elementAt(indexx)]![index]}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
+                          child: Text( '${index+1}. ${categoriesMap[categoriesMap.entries.elementAt(indexx).key]![index]}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)));
 
                     }),
-              ), title: "${categoriesMap.entries.elementAt(indexx)} (${categoriesMap[categoriesMap.entries.elementAt(indexx)]!.length} reviews)"
+              ),title: "${categoriesMap.entries.elementAt(indexx).key} (${categoriesMap[categoriesMap.entries.elementAt(indexx).key]!.length} reviews)"
                 ,),
             );
 
