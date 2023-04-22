@@ -34,7 +34,13 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('About Us', style: TextStyle(color: Colors.black, fontSize: 30),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('About Us', style: TextStyle(color: Colors.black, fontSize: 30),),
+                          Image.asset('assets/Images/mujlogo.png', height: MediaQuery.of(context).size.height/10, width: MediaQuery.of(context).size.width/8,),
+                        ],
+                      ),
                       Text('Welcome to our website! We are a team of two members, Vaibhavi Shandilya and R S Jaya Karthi, both of us currently pursuing B.Tech in computer sciences at Manipal University Jaipur. Our website was made as a part of minor project under the guidance of Ms. Shikha Mundra.', style: TextStyle(color: Colors.black, fontSize: 20),),
                       Text('Our website is specifically designed for restaurant owners and customers alike. Restaurant owners can view the analysis of reviews about their restaurants and make changes to improve their business. Customers can browse through the various aspects of a restaurant, such as its ambience, food quality, service, and pricing, and read reviews left by other customers. With our website, customers can make informed decisions and visit a restaurant that meets their expectations.', style: TextStyle(color: Colors.black, fontSize: 20),),
                       Text('We believe that our website is the perfect tool for both restaurant owners and customers. It provides detailed analysis about various aspects of the restaurants and performs analysis based on the data. We are thrilled to be a part of this project and are grateful for the opportunity to share it with you. We hope that you find our website useful and informative. Thank you for visiting!', style: TextStyle(color: Colors.black, fontSize: 20),)
