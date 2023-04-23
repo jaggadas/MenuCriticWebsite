@@ -15,7 +15,7 @@ To get started with MenuCritic, follow these steps:
 4. Navigate to the MenuCritic website in your web browser to use the application.
 
 ## Custom ML Model
-The custom machine learning model used by MenuCritic was created by me and trained on a dataset of restaurant reviews. The model is hosted on link.com.
+The custom machine learning model used by MenuCritic was created by me and trained on a dataset of restaurant reviews. The model is hosted on https://github.com/jaggadas/MenuCriticAPI.
 
 ## Features
 MenuCritic provides the following features:
