@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:menucritic/apikeys.dart';
 import 'package:menucritic/utils/testreview.dart';
 
 import '../models/Review.dart';
@@ -8,9 +9,9 @@ import '../models/Review.dart';
 class GoogleApiResponse {
   late String? googleID;
 
-  // final String _key = 'YXV0aDB8NjM5YjRjNTU1MDBiZTZlMGViNTgyNDc0fGJhZTIyZTFjZjU';
+
   final String _key =
-      'Z29vZ2xlLW9hdXRoMnwxMDg2MzQ3MjA2Njc2MDc3ODk4MjR8NmQzMTBjOTg1Mg';
+     apiKey1;
   Map data = {};
   late String resLoc;
   DateTime? time;
